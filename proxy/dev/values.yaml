@@ -5,7 +5,7 @@ nginx:
     app: wordpress
     env: dev
   image:
-    repository: dhananjayakafle/custom-nginx
+    repository: manabpokhrel7/nginx
     tag: "latest"
     pullPolicy: IfNotPresent
   replicas: 1
