@@ -1,0 +1,15 @@
+nginx:
+  name: wp-proxy
+  labels:
+    id: C0927678
+    app: wordpress
+    env: dev
+  image:
+    repository: dhananjayakafle/custom-nginx
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  replicas: 1
+  service:
+    type: NodePort
+    port: 80
+    targetPort: 80
