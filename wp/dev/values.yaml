@@ -10,13 +10,13 @@ wp:
     pullPolicy: Always
   replicas: 3
   configmap:
-    ## KEY: "value"
     APP_ENV: "dev"
     WORDPRESS_DB_HOST: "wp-database.wpdb.svc.cluster.local"
     WORDPRESS_DB_NAME: "wordpress"
     WORDPRESS_DB_USER: "wordpress"
-    APP_ENV: dev
   service:
     type: ClusterIP
     port: 80
     targetPort: 80
+  metrics:
+    enabled: true
