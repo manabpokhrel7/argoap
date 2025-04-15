@@ -4,11 +4,24 @@ metadata:
   name: {{ .Values.wp.name }}
   labels:
 {{- toYaml .Values.wp.labels | nindent 4 }}
+  annotations:
+{{- if .Values.wp.metrics.enabled }}
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9117"
+    prometheus.io/path: "/metrics"
+{{- end }}
 spec:
-  ports:
-  - port: 80            # the port on which the service is listening
-    protocol: TCP
-    targetPort: {{ .Values.wp.service.targetPort }}     # the port exposed by Pod (we defined in the deployment as part of `containerPort)
-  type: ClusterIP
   selector:
-{{- toYaml .Values.wp.labels | nindent 4 }}       # Pod label that service is using to select Pods
+{{- toYaml .Values.wp.labels | nindent 4 }}
+  ports:
+  - name: web
+    port: {{ .Values.wp.service.port }}
+    targetPort: {{ .Values.wp.service.targetPort }}
+    protocol: TCP
+{{- if .Values.wp.metrics.enabled }}
+  - name: metrics
+    port: 9117
+    targetPort: 9117
+    protocol: TCP
+{{- end }}
+  type: {{ .Values.wp.service.type }}
