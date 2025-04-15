@@ -2,11 +2,12 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ .Values.wp.name }}-monitor
+  name: {{ .Values.wp.name }}-blackbox
   namespace: monitoring
   labels:
     release: prometheus
 spec:
+  jobLabel: blackbox
   selector:
     matchLabels:
       app: {{ .Values.wp.labels.app }}
@@ -14,7 +15,19 @@ spec:
     matchNames:
       - {{ .Release.Namespace }}
   endpoints:
-    - port: metrics
-      interval: 15s
-      path: /metrics
+    - port: web
+      interval: 30s
+      path: /
+      scheme: http
+      params:
+        module:
+          - http_2xx
+      relabelings:
+        - sourceLabels: [__address__]
+          regex: (.*)
+          targetLabel: __param_target
+        - sourceLabels: [__param_target]
+          targetLabel: instance
+        - targetLabel: __address__
+          replacement: blackbox-exporter.monitoring.svc.cluster.local:9115
 {{- end }}
