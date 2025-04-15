@@ -27,13 +27,3 @@ spec:
               optional: false
         ports:
         - containerPort: {{ .Values.wp.service.targetPort }}
-
-{{- if .Values.wp.metrics.enabled }}
-      - name: wordpress-exporter
-        image: foomo/wordpress_exporter
-        ports:
-        - containerPort: 9117
-        env:
-        - name: WORDPRESS_URL
-          value: http://localhost
-{{- end }}
