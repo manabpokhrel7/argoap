@@ -30,3 +30,18 @@ wp:
     targetPort: 80
   metrics:
     enabled: true
+
+  # Add metrics configuration for Prometheus
+  prometheus:
+    enabled: true
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "9117"
+    serviceMonitor:
+      enabled: true
+      interval: 30s
+      metricRelabelings:
+        - sourceLabels: [__param_target]
+          targetLabel: target
+        - targetLabel: __address__
+          replacement: wordpress-exporter:9117  # Replace with your exporter service name
