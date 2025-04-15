@@ -20,7 +20,6 @@ wp:
       cpu: "250m"
       memory: "256Mi"
   configmap:
-    ## KEY: "value"
     WORDPRESS_DB_HOST: "wp-database.wpdb.svc.cluster.local:3306"
     WORDPRESS_DB_USER: wordpress
     WORDPRESS_DB_NAME: wordpress
@@ -29,3 +28,5 @@ wp:
     type: ClusterIP
     port: 80
     targetPort: 80
+  metrics:
+    enabled: true
